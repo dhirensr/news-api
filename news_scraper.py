@@ -13,60 +13,60 @@ def make_soup(url):
     return soup
 
 def get_ndtv_business_news(url):
-    news_json = {}
+    news_json = []
     soup = make_soup(url)
     all_headers = soup.find_all("h2",{"class" : "nstory_header"})
     for heading in all_headers:
         title = heading.a.text.strip()
         link = heading.a['href']
-        news_json[title] = link
+        news_json.append({'title': title, "url" : link})
 
     return news_json
 
 
 def get_livemint_news(url):
-    news_json = {}
+    news_json = []
     soup = make_soup(url)
     all_headers = soup.find_all("div",{"class" : "headlineSec"})
     for heading in all_headers:
         title = heading.a.text.strip()
         link = "https://www.livemint.com/" + heading.a['href']
-        news_json[title] = link
+        news_json.append({'title': title, "url" : link})
     return news_json
 
 
 def get_economic_times_news(url):
-    news_json = {}
+    news_json = []
     soup = make_soup(url)
     all_headers = soup.find_all("div",{"class" : "eachStory"})
     for heading in all_headers:
         title = heading.h3.a.text.strip()
         link = "https://economictimes.indiatimes.com" + heading.h3.a['href']
-        news_json[title] = link
+        news_json.append({'title': title, "url" : link})
     #print(news_json)
     return news_json
 
 def get_business_standard_news(url):
-    news_json = {}
+    news_json = []
     soup = make_soup(url)
     all_headers = soup.find_all("div",{"class" : "listing-txt"})
     for heading in all_headers:
         #print(heading)
         title = heading.h2.a.text.strip()
         link = "https://www.business-standard.com" + heading.h2.a['href']
-        news_json[title] = link
+        news_json.append({'title': title, "url" : link})
     return news_json
 
 
 def get_moneycontrol_news(url):
-    news_json = {}
+    news_json = []
     soup = make_soup(url)
     all_headers = soup.find_all("ul",{"id" : "cagetory"})[0].find_all("li")
     for heading in all_headers:
         if heading.a:
             title = heading.a['title']
             link = heading.a['href']
-            news_json[title] = link
+            news_json.append({'title': title, "url" : link})
     return news_json
 
 
