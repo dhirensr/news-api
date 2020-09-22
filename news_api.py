@@ -3,6 +3,10 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
+@my_awesome_app.route('/')
+def hello_world():
+    return 'Hello World! Welcome to news scraper'
+
 @app.route("/stock-market", methods=["GET"])
 def get_stock_market_news():
     page = request.args.get('page', 1, type=int)
