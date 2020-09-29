@@ -1,13 +1,25 @@
 import news_scraper
 from flask import Flask, jsonify, request
+from flask_caching import Cache
+
+
+config = {
+    "DEBUG": False,          # some Flask specific configs
+    "CACHE_TYPE": "simple", # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 300
+}
 
 app = Flask(__name__)
+app.config.from_mapping(config)
+cache = Cache(app)
 
 @app.route('/')
+@cache.cached(timeout=300)
 def hello_world():
     return 'Hello World! Welcome to news scraper'
 
 @app.route("/stock-market", methods=["GET"])
+@cache.cached(timeout=50)
 def get_stock_market_news():
     page = request.args.get('page', 1, type=int)
     livemint_news = news_scraper.get_livemint_news("https://www.livemint.com/listing/subsection/market~stock-market-news/"+str(page))
@@ -20,6 +32,7 @@ def get_stock_market_news():
     return jsonify(combined_news)
 
 @app.route("/commodities", methods=["GET"])
+@cache.cached(timeout=300)
 def get_commodities_news():
     page = request.args.get('page', 1, type=int)
     livemint_news = news_scraper.get_livemint_news("https://www.livemint.com/market/commodities/page-"+str(page))
@@ -31,6 +44,7 @@ def get_commodities_news():
 
 
 @app.route("/ipo-fpo", methods=["GET"])
+@cache.cached(timeout=300)
 def get_ipo_fpo_news():
     page = request.args.get('page', 1, type=int)
     livemint_news = news_scraper.get_livemint_news("https://www.livemint.com/market/ipo/page-"+str(page))
@@ -42,6 +56,7 @@ def get_ipo_fpo_news():
 
 
 @app.route("/mutual-funds", methods=["GET"])
+@cache.cached(timeout=300)
 def get_mutual_fund_news():
     page = request.args.get('page', 1, type=int)
     livemint_news = news_scraper.get_livemint_news("https://www.livemint.com/mutual-fund/mf-news/page-"+str(page))
@@ -53,6 +68,7 @@ def get_mutual_fund_news():
 
 
 @app.route("/top-news", methods=["GET"])
+@cache.cached(timeout=300)
 def get_top_news():
     page = request.args.get('page', 1, type=int)
     livemint_news = news_scraper.get_livemint_news("https://www.livemint.com/latest-news/page-"+str(page))
@@ -63,6 +79,15 @@ def get_top_news():
     combined_news = livemint_news +business_standard_news + ndtv_business_news + moneycontrol_top_news
     return jsonify(combined_news)
 
+
+@app.route("/live-streams", methods=["GET"])
+@cache.cached(timeout=300)
+def get_live_links():
+    live_stream_links  = {"ET Now Live" : "https://etnowweblive-lh.akamaihd.net/i/ETN_1@348070/index_576_av-p.m3u8" ,\
+                          "NDTV Profit Live" : "https://ndtvprofitelemarchana.akamaized.net/hls/live/2003680/ndtvprofit/masterp_480p@3.m3u8" ,\
+                          "CNBC Bazaar Live (Hindi)"  : "https://cnbcawaaz-lh.akamaihd.net/i/cnbcawaaz_1@174872/index_5_av-p.m3u8" , \
+                          "CNBC Bajar (Gujarati)"  : "https://cnbcbazar-lh.akamaihd.net/i/cnbcbajar_1@178933/index_1_av-b.m3u8"   }
+    return jsonify(live_stream_links)
 
 
 
