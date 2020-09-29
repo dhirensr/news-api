@@ -19,7 +19,7 @@ def get_ndtv_business_news(url):
     for heading in all_headers:
         title = heading.a.text.strip()
         link = heading.a['href']
-        news_json.append({'title': title, "url" : link})
+        news_json.append({'title': title, "url" : link , "source" : "NDTV Business"})
 
     return news_json
 
@@ -31,7 +31,7 @@ def get_livemint_news(url):
     for heading in all_headers:
         title = heading.a.text.strip()
         link = "https://www.livemint.com/" + heading.a['href']
-        news_json.append({'title': title, "url" : link})
+        news_json.append({'title': title, "url" : link, "source" : "Livemint"})
     return news_json
 
 
@@ -42,7 +42,7 @@ def get_economic_times_news(url):
     for heading in all_headers:
         title = heading.h3.a.text.strip()
         link = "https://economictimes.indiatimes.com" + heading.h3.a['href']
-        news_json.append({'title': title, "url" : link})
+        news_json.append({'title': title, "url" : link, "source" : "Economic Times"})
     #print(news_json)
     return news_json
 
@@ -54,7 +54,7 @@ def get_business_standard_news(url):
         #print(heading)
         title = heading.h2.a.text.strip()
         link = "https://www.business-standard.com" + heading.h2.a['href']
-        news_json.append({'title': title, "url" : link})
+        news_json.append({'title': title, "url" : link, "source" : "Business Standard"})
     return news_json
 
 
@@ -66,7 +66,7 @@ def get_moneycontrol_news(url):
         if heading.a:
             title = heading.a['title']
             link = heading.a['href']
-            news_json.append({'title': title, "url" : link})
+            news_json.append({'title': title, "url" : link, "source" : "Moneycontrol"})
     return news_json
 
 
