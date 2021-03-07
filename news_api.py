@@ -1,7 +1,7 @@
 import news_scraper
 from flask import Flask, jsonify, request
 from flask_caching import Cache
-
+from flask_cors import CORS
 
 config = {
     "DEBUG": False,          # some Flask specific configs
@@ -12,6 +12,7 @@ config = {
 app = Flask(__name__)
 app.config.from_mapping(config)
 cache = Cache(app)
+CORS(app)
 
 @app.route('/')
 @cache.cached(timeout=300)
